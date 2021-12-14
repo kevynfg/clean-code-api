@@ -1,3 +1,5 @@
 {
-  "*.ts": ["eslint 'src/**' --fix", "git add"]
+  "lint-staged": {
+    "*.ts": ["eslint 'src/**' --fix", "git add"]
+  }
 }
