@@ -1,5 +1,11 @@
 {
     "parserOptions": {
-        "project": "./tsconfig.json"
-    }
+        "project": "./tsconfig.json",
+        "ecmaVersion": 2017,
+        "sourceType": "module"
+    },
+    "env": {
+        "es6": true
+    },
+    "parser": "@typescript-eslint/parser"
 }

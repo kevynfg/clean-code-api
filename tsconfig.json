@@ -1,9 +1,23 @@
 {
     "compilerOptions": {
         "outDir": "./dist",
-        "module": "commonjs",
+        "module": "ES6",
         "target": "es2019",
         "esModuleInterop": true,
-        "allowJs": true
-    }
+        "allowJs": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "noFallthroughCasesInSwitch": true,
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "node",
+        "removeComments": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "lib": ["dom", "es6", "es2017", "esnext.asynciterable", "ES2019"],
+        "skipLibCheck": true,
+        "sourceMap": true,
+    },
+    "exclude": ["node_modules"],
 }
