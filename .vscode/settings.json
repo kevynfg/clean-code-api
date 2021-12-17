@@ -1,4 +1,6 @@
 {
     "editor.tabSize": 2,
-    "editor.smoothScrolling": true
+    "editor.smoothScrolling": true,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
