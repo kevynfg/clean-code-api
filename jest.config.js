@@ -15,6 +15,7 @@ module.exports = {
   transform: {
     ".+\\.ts": "ts-jest",
   },
+  preset: "@shelf/jest-mongodb",
   // Indicates which provider should be used to instrument code for coverage
   coverageProvider: "v8",
 };
