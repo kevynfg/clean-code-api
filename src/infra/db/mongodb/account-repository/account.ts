@@ -1,10 +1,14 @@
+import { InsertOneResult } from "mongodb";
 import { AddAccountRepository } from "../../../../data/protocols/add-account-repository";
 import { AccountModel } from "../../../../domain/models/account";
 import { AddAccountModel } from "../../../../domain/usecases/add-account";
-export class AccountMongoRepository implements AddAccountRepository {
-  add(accountData: AddAccountModel): Promise<AccountModel> {
+import { MongoHelper } from "../helpers/mongo-helper";
+export class AccountMongoRepository {
+  async add(accountData: AddAccountModel): Promise<InsertOneResult<Document>> {
+    const accountCollection = MongoHelper.getCollection("accounts");
+    const result = await accountCollection.insertOne(accountData);
     return new Promise((resolve, reject) => {
-      resolve(null);
+      resolve(result);
     });
   }
 }
