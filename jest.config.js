@@ -10,11 +10,12 @@ module.exports = {
   // Indicates whether the coverage information should be collected while executing the test
   collectCoverage: true,
   coverageDirectory: "coverage",
-  collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
+  collectCoverageFrom: ["<rootDir>/src/**/*.ts", "!<rootDir>/src/main/**"],
   roots: ["<rootDir>/src"],
   transform: {
     ".+\\.ts": "ts-jest",
   },
+  //mongodb in memory
   preset: "@shelf/jest-mongodb",
   // Indicates which provider should be used to instrument code for coverage
   coverageProvider: "v8",
