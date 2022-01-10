@@ -7,16 +7,11 @@ export const MongoHelper = {
   async connect(uri: string): Promise<void> {
     this.uri = uri;
     this.client = await MongoClient.connect(uri);
-    this.client.addListener("connectionCreated", () => {
-      this.isConnected = true;
-      console.log("MongoDB is Connected ? => ", this.isConnected);
-    });
+    this.isConnected = true;
   },
   async disconnect(): Promise<void> {
     await this.client.close();
-    this.client.addListener("connectionClosed", () => {
-      this.isConnected = false;
-    });
+    this.isConnected = false;
     this.client = null;
   },
   async getCollection(name: string): Promise<Collection> {
