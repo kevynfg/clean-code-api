@@ -95,7 +95,7 @@ describe("LogController Decorator", () => {
       .spyOn(controllerStub, "handle")
       .mockReturnValueOnce(Promise.resolve(error));
 
-    const logSpy = spyOn(logErrorRepositoryStub, "log");
+    const logSpy = jest.spyOn(logErrorRepositoryStub, "log");
     const httpRequest = {
       body: {
         email: "valid_email@email.com",
