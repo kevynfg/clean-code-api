@@ -99,7 +99,7 @@ describe("Login Controller", () => {
     const { sut, authenticationStub } = makeSut();
 
     const authSpy = jest.spyOn(authenticationStub, "auth");
-    const httpResponse = await sut.handle(makeFakeLoginRequest());
+    await sut.handle(makeFakeLoginRequest());
     expect(authSpy).toHaveBeenCalledWith(
       "any_email@email.com",
       "valid_password"
