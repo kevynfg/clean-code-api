@@ -1,12 +1,11 @@
-import { Authentication } from "../../../domain/usecases/authentication";
-import { InvalidParamError, MissingParamError } from "../../errors";
+import { MissingParamError, InvalidParamError } from "../../errors";
 import {
   badRequest,
   serverError,
   unauthorized,
 } from "../../helpers/http-helper";
-import { EmailValidator, HttpRequest } from "../signup/signup-protocols";
 import { LoginController } from "./login";
+import { EmailValidator, Authentication, HttpRequest } from "./login-protocols";
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -118,5 +117,15 @@ describe("Login Controller", () => {
 
     const httpResponse = await sut.handle(makeFakeLoginRequest());
     expect(httpResponse).toEqual(unauthorized());
+  });
+
+  test("Should return 500 if Authentication throws", async () => {
+    const { sut, authenticationStub } = makeSut();
+    jest
+      .spyOn(authenticationStub, "auth")
+      .mockReturnValueOnce(Promise.reject(new Error()));
+
+    const httpResponse = await sut.handle(makeFakeLoginRequest());
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 });
