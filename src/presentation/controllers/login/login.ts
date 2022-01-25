@@ -5,6 +5,7 @@ import {
   serverError,
   ok,
 } from "../../helpers/http-helper";
+import { Validation } from "../signup/signup-protocols";
 import {
   Controller,
   EmailValidator,
@@ -16,17 +17,21 @@ import {
 export class LoginController implements Controller {
   private readonly emailValidator: EmailValidator;
   private readonly authentication: Authentication;
-  constructor(emailValidator: EmailValidator, authentication: Authentication) {
+  private readonly validation: Validation;
+  constructor(
+    emailValidator: EmailValidator,
+    authentication: Authentication,
+    validation: Validation
+  ) {
     this.emailValidator = emailValidator;
     this.authentication = authentication;
+    this.validation = validation;
   }
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const requiredFields = ["email", "password"];
-      for (const field of requiredFields) {
-        if (!httpRequest.body[field]) {
-          return badRequest(new MissingParamError(field));
-        }
+      const error = this.validation.validate(httpRequest.body);
+      if (error) {
+        return badRequest(error);
       }
 
       const { password, email } = httpRequest.body;
