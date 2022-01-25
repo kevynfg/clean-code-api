@@ -5,6 +5,7 @@ import {
   serverError,
   unauthorized,
 } from "../../helpers/http-helper";
+import { Validation } from "../signup/signup-protocols";
 import { LoginController } from "./login";
 import { EmailValidator, Authentication, HttpRequest } from "./login-protocols";
 
@@ -26,20 +27,36 @@ const makeAuthenticationStub = (): Authentication => {
   return new AuthenticationStub();
 };
 
+const makeValidation = (): Validation => {
+  class ValidationStub implements Validation {
+    validate(input: any): Error {
+      return null;
+    }
+  }
+  return new ValidationStub();
+};
+
 interface sutTypes {
   sut: LoginController;
   emailValidatorStub: EmailValidator;
   authenticationStub: Authentication;
+  validationStub: Validation;
 }
 
 const makeSut = (): sutTypes => {
   const emailValidatorStub = makeEmailValidator();
   const authenticationStub = makeAuthenticationStub();
-  const sut = new LoginController(emailValidatorStub, authenticationStub);
+  const validationStub = makeValidation();
+  const sut = new LoginController(
+    emailValidatorStub,
+    authenticationStub,
+    validationStub
+  );
   return {
     sut,
     emailValidatorStub,
     authenticationStub,
+    validationStub,
   };
 };
 
