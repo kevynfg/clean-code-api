@@ -8,7 +8,7 @@ import {
   Validation,
 } from "./signup-protocols";
 import { ServerError } from "../../errors/server-error";
-import { ok, serverError } from "../../helpers/http-helper";
+import { ok, serverError } from "../../helpers/http/http-helper";
 
 interface SutTypes {
   sut: SignUpController;
@@ -106,6 +106,6 @@ describe("SignUp Controller", () => {
       .spyOn(validationStub, "validate")
       .mockReturnValueOnce(new MissingParamError("any_field"));
     const httpResponse = await sut.handle(makeFakeRequest());
-    expect(httpResponse).toEqual(new MissingParamError("any_field"));
+    expect(httpResponse.body).toEqual(new MissingParamError("any_field"));
   });
 });
