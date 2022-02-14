@@ -17,14 +17,14 @@ describe("Bcrypt Adapter", () => {
     const sut = makeSut();
 
     const hashSpy = jest.spyOn(bcrypt, "hash");
-    await sut.encrypt("any_value");
+    await sut.hash("any_value");
     expect(hashSpy).toHaveBeenCalledWith("any_value", salt);
   });
 
   test("Should return a hash on success", async () => {
     const sut = makeSut();
 
-    const hash = await sut.encrypt("any_value");
+    const hash = await sut.hash("any_value");
     expect(hash).toBe("hash");
   });
 });
