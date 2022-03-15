@@ -5,8 +5,8 @@ import {
   AddAccount,
   AddAccountModel,
   Validation,
-} from "./signup-protocols";
-import { MissingParamError } from "../../errors/";
+} from "./signup-controller-protocols";
+import { MissingParamError } from "../../errors";
 import { badRequest, ok, serverError } from "../../helpers/http/http-helper";
 
 export class SignUpController implements Controller {
