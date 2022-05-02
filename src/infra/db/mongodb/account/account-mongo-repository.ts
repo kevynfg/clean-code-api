@@ -1,11 +1,11 @@
-import { InsertOneResult, ObjectId } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { AccountModel } from '../../../../domain/models/account'
 import { AddAccountModel } from '../../../../domain/usecases/add-account'
 import { MongoHelper } from '../helpers/mongo-helper'
 export class AccountMongoRepository {
-  async add(accountData: AddAccountModel): Promise<InsertOneResult<Document>> {
+  async add(accountData: AddAccountModel): Promise<AccountModel> {
     const accountCollection = await MongoHelper.getCollection('accounts')
-    const result = await accountCollection.insertOne(accountData)
+    const result = (await accountCollection.insertOne(accountData)) as unknown as AccountModel
     return new Promise((resolve) => {
       resolve(result)
     })
