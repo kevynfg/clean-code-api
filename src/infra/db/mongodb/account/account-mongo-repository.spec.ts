@@ -26,6 +26,6 @@ describe("Account Mongo Repository", () => {
       email: "valid_email@email.com",
       password: "valid_password",
     })) as any;
-    expect(account.insertedId).toBeUndefined();
+    expect(account.insertedId).toBeTruthy();
   });
 });
