@@ -21,11 +21,11 @@ describe("Account Mongo Repository", () => {
 
   test("Should return an account on success", async () => {
     const sut = makeSut();
-    const account = await sut.add({
+    const account = (await sut.add({
       name: "valid_name",
       email: "valid_email@email.com",
       password: "valid_password",
-    });
-    expect(account).toBeUndefined();
+    })) as any;
+    expect(account.insertedId).toBeUndefined();
   });
 });
