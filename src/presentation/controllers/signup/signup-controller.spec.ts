@@ -10,7 +10,8 @@ import {
   Validation,
 } from "./signup-controller-protocols";
 import { ServerError } from "../../errors/server-error";
-import { ok, serverError } from "../../helpers/http/http-helper";
+import { forbidden, ok, serverError } from "../../helpers/http/http-helper";
+import { EmailInUseError } from "../../errors";
 
 interface SutTypes {
   sut: SignUpController;
@@ -64,7 +65,7 @@ const makeFakeRequest = (): HttpRequest => ({
   body: {
     name: "any_name",
     email: "any_email@email.com",
-    password: "valid_password",
+    password: "any_password",
     passwordConfirmation: "any_password",
   },
 });
@@ -99,6 +100,14 @@ describe("SignUp Controller", () => {
     expect(httpResponse).toEqual(serverError(new ServerError(null)));
   });
 
+  test("should return 403 if AddAccount returns null", async () => {
+    const { sut, addAccountStub } = makeSut();
+    const spy = jest.spyOn(addAccountStub, "add").mockReturnValueOnce(new Promise((resolve) => resolve(null)));
+    const httpRequest = makeFakeRequest();
+    const httpResponse = await sut.handle(httpRequest);
+    expect(httpResponse).toEqual(forbidden(new EmailInUseError()));
+  });
+
   test("should return 200 if valid data provided", async () => {
     const { sut } = makeSut();
     const httpRequest = makeFakeRequest();
@@ -128,7 +137,7 @@ describe("SignUp Controller", () => {
     await sut.handle(makeFakeRequest());
     expect(authSpy).toHaveBeenCalledWith({
       email: "any_email@email.com",
-      password: "valid_password",
+      password: "any_password",
     });
   });
 
