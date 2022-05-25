@@ -128,7 +128,7 @@ describe("SignUp Controller", () => {
     await sut.handle(makeFakeRequest());
     expect(authSpy).toHaveBeenCalledWith({
       email: "any_email@email.com",
-      password: "any_password",
+      password: "valid_password",
     });
   });
 
