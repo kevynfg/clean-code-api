@@ -64,7 +64,7 @@ const makeFakeRequest = (): HttpRequest => ({
   body: {
     name: "any_name",
     email: "any_email@email.com",
-    password: "any_password",
+    password: "valid_password",
     passwordConfirmation: "any_password",
   },
 });
@@ -128,7 +128,7 @@ describe("SignUp Controller", () => {
     await sut.handle(makeFakeRequest());
     expect(authSpy).toHaveBeenCalledWith({
       email: "any_email@email.com",
-      password: "valid_password",
+      password: "any_password",
     });
   });
 
