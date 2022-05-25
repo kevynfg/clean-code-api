@@ -5,6 +5,7 @@ import {
   AddAccount,
   AddAccountModel,
   Validation,
+  Authentication,
 } from "./signup-controller-protocols";
 import { MissingParamError } from "../../errors";
 import { badRequest, ok, serverError } from "../../helpers/http/http-helper";
@@ -12,7 +13,8 @@ import { badRequest, ok, serverError } from "../../helpers/http/http-helper";
 export class SignUpController implements Controller {
   constructor(
     private readonly addAccount: AddAccount,
-    private readonly validation: Validation
+    private readonly validation: Validation,
+    private readonly authentication: Authentication
   ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -21,12 +23,7 @@ export class SignUpController implements Controller {
       if (error) {
         return badRequest(error);
       }
-      const requiredFields = [
-        "name",
-        "email",
-        "password",
-        "passwordConfirmation",
-      ];
+      const requiredFields = ["name", "email", "password", "passwordConfirmation"];
       for (const field of requiredFields) {
         if (!httpRequest.body[field]) {
           return badRequest(new MissingParamError(field));
@@ -39,6 +36,10 @@ export class SignUpController implements Controller {
         email,
         password,
       } as AddAccountModel);
+      await this.authentication.auth({
+        email,
+        password,
+      });
       return ok(account);
     } catch (error) {
       console.error(error);

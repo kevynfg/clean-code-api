@@ -4,6 +4,8 @@ import {
   AccountModel,
   AddAccount,
   AddAccountModel,
+  Authentication,
+  AuthenticationModel,
   HttpRequest,
   Validation,
 } from "./signup-controller-protocols";
@@ -14,6 +16,7 @@ interface SutTypes {
   sut: SignUpController;
   addAccountStub: AddAccount;
   validationStub: Validation;
+  authenticationStub: Authentication;
 }
 
 const makeAddAccount = (): AddAccount => {
@@ -35,14 +38,25 @@ const makeValidation = (): Validation => {
   return new ValidationStub();
 };
 
+const makeAuthenticationStub = (): Authentication => {
+  class AuthenticationStub implements Authentication {
+    async auth(authentication: AuthenticationModel): Promise<string> {
+      return "valid_token";
+    }
+  }
+  return new AuthenticationStub();
+};
+
 const makeSut = (): SutTypes => {
   const addAccountStub = makeAddAccount();
   const validationStub = makeValidation();
-  const sut = new SignUpController(addAccountStub, validationStub);
+  const authenticationStub = makeAuthenticationStub();
+  const sut = new SignUpController(addAccountStub, validationStub, authenticationStub);
   return {
     sut,
     addAccountStub,
     validationStub,
+    authenticationStub,
   };
 };
 
@@ -102,10 +116,19 @@ describe("SignUp Controller", () => {
 
   test("should return 400 if validation returns an error", async () => {
     const { sut, validationStub } = makeSut();
-    jest
-      .spyOn(validationStub, "validate")
-      .mockReturnValueOnce(new MissingParamError("any_field"));
+    jest.spyOn(validationStub, "validate").mockReturnValueOnce(new MissingParamError("any_field"));
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse.body).toEqual(new MissingParamError("any_field"));
+  });
+
+  test("Should call Authentication with correct values", async () => {
+    const { sut, authenticationStub } = makeSut();
+
+    const authSpy = jest.spyOn(authenticationStub, "auth");
+    await sut.handle(makeFakeRequest());
+    expect(authSpy).toHaveBeenCalledWith({
+      email: "any_email@email.com",
+      password: "valid_password",
+    });
   });
 });
